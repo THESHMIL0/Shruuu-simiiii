@@ -11,6 +11,8 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            /* Prevents the annoying blue tap flash on mobile */
+            -webkit-tap-highlight-color: transparent; 
         }
 
         body {
@@ -23,7 +25,7 @@
             width: 100vw;
         }
 
-        /* --- ✨ INTRO SCREEN (CUTE & CLEAN REVAMP) ✨ --- */
+        /* --- ✨ INTRO SCREEN ✨ --- */
         #intro-screen {
             position: fixed;
             top: 0;
@@ -39,6 +41,11 @@
             justify-content: center;
             transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1), opacity 1s ease;
             will-change: transform, opacity;
+            
+            /* Stops the phone from trying to copy/highlight text when dragging */
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
         }
 
         #intro-screen.pulled {
@@ -53,13 +60,12 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Cleaner, softer glass panel */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.15); /* More transparent */
+            background: rgba(255, 255, 255, 0.15); 
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.6);
-            border-radius: 40px; /* Softer, rounder corners */
+            border-radius: 40px; 
             padding: 50px 30px;
             width: 85vw;
             max-width: 380px;
@@ -69,13 +75,12 @@
             align-items: center;
         }
 
-        /* Fixed typography: Crisp pink instead of hard-to-read white */
         .intro-title {
             font-family: 'Caveat', cursive;
             font-size: 4.5rem;
             color: #ff85a2; 
             line-height: 1.1;
-            text-shadow: 2px 2px 0px #fff; /* Clean outline */
+            text-shadow: 2px 2px 0px #fff; 
             margin-bottom: 10px;
         }
 
@@ -83,7 +88,7 @@
             font-family: 'Quicksand', sans-serif;
             font-weight: bold;
             font-size: 1.1rem;
-            color: #d16b86; /* Darker pink for better reading */
+            color: #d16b86; 
             margin-bottom: 20px;
         }
 
@@ -98,14 +103,17 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            cursor: pointer;
+            cursor: grab; /* Shows a grab hand on desktop */
             animation: gentleFloat 2.5s infinite ease-in-out;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            /* Stops browser from scrolling the page when you drag this */
+            touch-action: none; 
         }
+
+        .thread-container:active { cursor: grabbing; }
 
         .thread-line {
             width: 4px;
-            height: 70px; /* Slightly shorter */
+            height: 70px; 
             background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,1));
             border-radius: 5px;
         }
@@ -114,12 +122,8 @@
             font-size: 4.5rem;
             margin-top: -10px;
             filter: drop-shadow(0px 6px 8px rgba(255, 133, 162, 0.3));
-            transition: transform 0.2s;
         }
 
-        .thread-container:active .thread-heart { transform: scale(0.9); }
-
-        /* Cleaned up Pull Hint: Now a centered pill below the heart */
         .pull-hint {
             margin-top: 20px;
             background: #fff;
@@ -159,7 +163,7 @@
             100% { transform: translate(calc(-50% + var(--end-x)), calc(-50% + var(--end-y))) scale(8); opacity: 0; }
         }
 
-        /* --- MAIN CONTENT (Perfect Fit Flexbox) --- */
+        /* --- MAIN CONTENT --- */
         #main-content {
             height: 100dvh; 
             width: 100vw;
@@ -320,7 +324,7 @@
             <p class="intro-text">Ready to unlock our world?</p>
             
             <div class="thread-wrapper">
-                <div class="thread-container" id="thread" onclick="pullThread()">
+                <div class="thread-container" id="thread">
                     <div class="thread-line"></div>
                     <div class="thread-heart">💖</div>
                 </div>
@@ -376,6 +380,117 @@
     </div>
 
     <script>
+        // --- REAL PHYSICS DRAG SYSTEM ---
+        const thread = document.getElementById('thread');
+        let startY = 0;
+        let isDragging = false;
+        let isPulled = false;
+
+        function handleDragStart(e) {
+            if (isPulled) return;
+            isDragging = true;
+            // Get finger or mouse Y position
+            startY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+            
+            // Stop the CSS float animation so it instantly follows your finger
+            thread.style.transition = 'none';
+            thread.style.animation = 'none';
+        }
+
+        function handleDragMove(e) {
+            if (!isDragging || isPulled) return;
+            e.preventDefault(); // Stop the phone screen from scrolling
+
+            const currentY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+            const distance = currentY - startY;
+
+            // Only allow dragging downwards
+            if (distance > 0) {
+                // Resistance math: it gets slightly harder to pull the further down you go
+                const pullDistance = Math.min(distance * 0.5, 80);
+                
+                // Move it down and shrink slightly like a taut string
+                thread.style.transform = `translateY(${pullDistance}px) scale(${1 - pullDistance * 0.002})`;
+
+                // THRESHOLD MET: They pulled it far enough! Boom!
+                if (pullDistance >= 65) {
+                    isPulled = true;
+                    isDragging = false;
+                    executePull();
+                }
+            }
+        }
+
+        function handleDragEnd() {
+            if (!isDragging || isPulled) return;
+            isDragging = false;
+            
+            // SNAPPING BACK: They let go too early, snap it back to the top
+            thread.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            thread.style.transform = 'translateY(0) scale(1)';
+            
+            // Restart the floating animation after it snaps back
+            setTimeout(() => {
+                if (!isPulled) thread.style.animation = 'gentleFloat 2.5s infinite ease-in-out';
+            }, 500);
+        }
+
+        // Attach event listeners for both Mouse (computer) and Touch (mobile)
+        thread.addEventListener('mousedown', handleDragStart);
+        thread.addEventListener('mousemove', handleDragMove);
+        window.addEventListener('mouseup', handleDragEnd);
+
+        thread.addEventListener('touchstart', handleDragStart, { passive: false });
+        thread.addEventListener('touchmove', handleDragMove, { passive: false });
+        window.addEventListener('touchend', handleDragEnd);
+
+        // --- THE MAIN DIRECTOR ---
+        function executePull() {
+            // Give it one final satisfying snap down before diving into the site
+            thread.style.transition = 'transform 0.2s ease-in';
+            thread.style.transform = "translateY(100px) scale(0.8)";
+            
+            setTimeout(() => {
+                const music = document.getElementById('bg-music');
+                music.play().catch(error => console.log("Audio block."));
+                
+                document.getElementById('intro-screen').classList.add('pulled');
+                document.getElementById('main-content').classList.add('visible');
+                
+                travelInterval = setInterval(spawnTravelItem, 250);
+
+                setTimeout(() => {
+                    let sWrap = document.getElementById('shree-wrapper');
+                    sWrap.style.opacity = '1';
+                    sWrap.style.animation = 'shreeEncounter 2s cubic-bezier(0.25, 1, 0.5, 1) forwards';
+                }, 400);
+
+                setTimeout(() => {
+                    let shWrap = document.getElementById('shimi-wrapper');
+                    shWrap.style.opacity = '1';
+                    shWrap.style.animation = 'shimiEncounter 2s cubic-bezier(0.25, 1, 0.5, 1) forwards';
+                }, 2200);
+
+                setTimeout(() => {
+                    let heart = document.getElementById('conn-heart');
+                    heart.style.opacity = '1';
+                    heart.style.animation = 'heartEncounter 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards';
+                    clearInterval(travelInterval); 
+                }, 4000);
+
+                setTimeout(() => {
+                    typeTitle();
+                }, 5200);
+
+                setTimeout(() => {
+                    document.getElementById('ldr-kit').classList.add('animate-bounce-up');
+                    document.getElementById('hug-button').classList.add('animate-pop-btn');
+                    document.getElementById('credit-text').classList.add('animate-credit');
+                }, 7200);
+
+            }, 200); 
+        }
+
         const cloudContainer = document.getElementById('cloud-container');
         const travelEmojis = ['☁️', '☁️', '☁️', '✨', '💖'];
         let travelInterval;
@@ -416,51 +531,6 @@
             } else {
                 document.getElementById('main-cursor').style.display = 'none';
             }
-        }
-
-        function pullThread() {
-            const thread = document.getElementById('thread');
-            thread.style.transform = "translateY(50px) scale(0.8)";
-            
-            setTimeout(() => {
-                const music = document.getElementById('bg-music');
-                music.play().catch(error => console.log("Audio block."));
-                
-                document.getElementById('intro-screen').classList.add('pulled');
-                document.getElementById('main-content').classList.add('visible');
-                
-                travelInterval = setInterval(spawnTravelItem, 250);
-
-                setTimeout(() => {
-                    let sWrap = document.getElementById('shree-wrapper');
-                    sWrap.style.opacity = '1';
-                    sWrap.style.animation = 'shreeEncounter 2s cubic-bezier(0.25, 1, 0.5, 1) forwards';
-                }, 400);
-
-                setTimeout(() => {
-                    let shWrap = document.getElementById('shimi-wrapper');
-                    shWrap.style.opacity = '1';
-                    shWrap.style.animation = 'shimiEncounter 2s cubic-bezier(0.25, 1, 0.5, 1) forwards';
-                }, 2200);
-
-                setTimeout(() => {
-                    let heart = document.getElementById('conn-heart');
-                    heart.style.opacity = '1';
-                    heart.style.animation = 'heartEncounter 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards';
-                    clearInterval(travelInterval); 
-                }, 4000);
-
-                setTimeout(() => {
-                    typeTitle();
-                }, 5200);
-
-                setTimeout(() => {
-                    document.getElementById('ldr-kit').classList.add('animate-bounce-up');
-                    document.getElementById('hug-button').classList.add('animate-pop-btn');
-                    document.getElementById('credit-text').classList.add('animate-credit');
-                }, 7200);
-
-            }, 250); 
         }
 
         function sendHug() {
