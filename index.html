@@ -19,12 +19,11 @@
             color: #5a4a4d;
             text-align: center;
             overflow: hidden; 
-            /* 100dvh ensures it fits perfectly on mobile browsers, ignoring the URL bar */
             height: 100dvh; 
             width: 100vw;
         }
 
-        /* --- Intro Screen (The Glass Curtain) --- */
+        /* --- ✨ INTRO SCREEN (CUTE & CLEAN REVAMP) ✨ --- */
         #intro-screen {
             position: fixed;
             top: 0;
@@ -54,27 +53,29 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* Cleaner, softer glass panel */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 30px;
-            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.15); /* More transparent */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 40px; /* Softer, rounder corners */
+            padding: 50px 30px;
             width: 85vw;
-            max-width: 400px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            max-width: 380px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
+        /* Fixed typography: Crisp pink instead of hard-to-read white */
         .intro-title {
             font-family: 'Caveat', cursive;
             font-size: 4.5rem;
-            color: #fff;
+            color: #ff85a2; 
             line-height: 1.1;
-            text-shadow: 2px 2px 8px rgba(255, 133, 162, 0.5);
+            text-shadow: 2px 2px 0px #fff; /* Clean outline */
             margin-bottom: 10px;
         }
 
@@ -82,12 +83,16 @@
             font-family: 'Quicksand', sans-serif;
             font-weight: bold;
             font-size: 1.1rem;
-            color: #fff;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            color: #d16b86; /* Darker pink for better reading */
             margin-bottom: 20px;
         }
 
-        .thread-wrapper { position: relative; margin-top: 10px; }
+        .thread-wrapper { 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px; 
+        }
 
         .thread-container {
             display: flex;
@@ -100,45 +105,39 @@
 
         .thread-line {
             width: 4px;
-            height: 80px;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.2), rgba(255,255,255,1));
+            height: 70px; /* Slightly shorter */
+            background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,1));
             border-radius: 5px;
         }
 
         .thread-heart {
             font-size: 4.5rem;
             margin-top: -10px;
-            filter: drop-shadow(0px 8px 10px rgba(255, 133, 162, 0.4));
+            filter: drop-shadow(0px 6px 8px rgba(255, 133, 162, 0.3));
             transition: transform 0.2s;
         }
 
         .thread-container:active .thread-heart { transform: scale(0.9); }
 
+        /* Cleaned up Pull Hint: Now a centered pill below the heart */
         .pull-hint {
-            position: absolute;
-            right: -60px;
-            top: 50%;
-            background: #ff85a2;
-            color: white;
-            font-family: 'Caveat', cursive;
-            font-size: 1.5rem;
-            padding: 5px 15px;
-            border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(255, 133, 162, 0.4);
-            animation: bounceLeft 1.5s infinite;
+            margin-top: 20px;
+            background: #fff;
+            color: #ff85a2;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 8px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(255, 133, 162, 0.2);
+            animation: floatUpDown 2s infinite ease-in-out;
             pointer-events: none;
         }
 
-        .pull-hint::before {
-            content: ''; position: absolute; left: -8px; top: 50%;
-            transform: translateY(-50%); border-top: 8px solid transparent;
-            border-bottom: 8px solid transparent; border-right: 8px solid #ff85a2;
-        }
-
         @keyframes gentleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
-        @keyframes bounceLeft { 0%, 100% { transform: translateX(0) translateY(-50%); } 50% { transform: translateX(-10px) translateY(-50%); } }
+        @keyframes floatUpDown { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
 
-        /* --- CLOUD TRAVEL SYSTEM (Optimized for Mobile GPU) --- */
+        /* --- CLOUD TRAVEL SYSTEM --- */
         #cloud-container {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             pointer-events: none; z-index: 5;
@@ -149,12 +148,10 @@
             font-size: 3rem;
             transform: translate(-50%, -50%) scale(0.1);
             opacity: 0;
-            /* Hardware acceleration flag */
             will-change: transform, opacity;
             animation: cloudZoom 2s linear forwards;
         }
 
-        /* Removed blur filter for massive performance boost */
         @keyframes cloudZoom {
             0% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; }
             20% { opacity: 0.8; }
@@ -169,7 +166,7 @@
             padding: 10px; 
             opacity: 0; display: none; 
             flex-direction: column;
-            justify-content: space-evenly; /* Evenly spaces items to fit the screen */
+            justify-content: space-evenly; 
             align-items: center;
         }
 
@@ -178,7 +175,7 @@
         header { flex-shrink: 0; }
 
         h1 {
-            font-size: clamp(2rem, 6vw, 2.8rem); /* Scales with screen width */
+            font-size: clamp(2rem, 6vw, 2.8rem); 
             color: #ff85a2; text-shadow: 2px 2px #fff;
             margin-bottom: 5px; min-height: 40px;
         }
@@ -204,7 +201,7 @@
 
         .polaroid {
             background: #fff; 
-            padding: 8px 8px 12px 8px; /* Clean, tight padding */
+            padding: 8px 8px 12px 8px; 
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
             width: 42vw; max-width: 160px; 
             border-radius: 8px; 
@@ -217,13 +214,12 @@
             z-index: 20;
         }
 
-        /* FIXED PHOTOS: Perfect squares, no bleeding */
         .polaroid img {
             width: 100%; 
-            aspect-ratio: 1 / 1; /* Automatically creates a perfect square */
+            aspect-ratio: 1 / 1; 
             object-fit: cover; 
-            border-radius: 4px; /* Slightly smaller radius than the outside card */
-            display: block; /* Removes bottom spacing bugs */
+            border-radius: 4px; 
+            display: block; 
         }
 
         .polaroid p { margin-top: 8px; font-weight: bold; color: #ff85a2; font-size: clamp(0.8rem, 3vw, 1rem); }
@@ -247,7 +243,7 @@
             background: white; width: 90%; max-width: 350px; 
             padding: 15px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.08);
             text-align: left; opacity: 0; border: 3px dashed #ffe6ea;
-            flex-shrink: 1; /* Shrinks to prevent scrolling on very tiny phones */
+            flex-shrink: 1; 
         }
 
         .checklist h3 { color: #ff85a2; text-align: center; margin-bottom: 10px; font-size: clamp(1.1rem, 4vw, 1.3rem); }
@@ -290,7 +286,6 @@
             100% { opacity: 1; transform: translate(0, 0) scale(1); }
         }
 
-        /* Bottom UI popping up smooth */
         .animate-bounce-up { animation: bounceUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         .animate-pop-btn { animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.3s; }
         .animate-credit { animation: bounceUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.5s; }
@@ -298,7 +293,6 @@
         @keyframes bounceUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes popIn { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
 
-        /* Wavy Floating Hearts generated by Send Hug JS */
         .floating-heart {
             position: fixed; bottom: -50px; font-size: 2rem;
             animation: floatUpWavy 4s ease-in forwards; pointer-events: none; z-index: 50;
@@ -324,13 +318,15 @@
         <div class="glass-panel">
             <h2 class="intro-title">Shree &<br>Shimi</h2>
             <p class="intro-text">Ready to unlock our world?</p>
+            
             <div class="thread-wrapper">
                 <div class="thread-container" id="thread" onclick="pullThread()">
                     <div class="thread-line"></div>
                     <div class="thread-heart">💖</div>
                 </div>
-                <div class="pull-hint">Pull me! 🥺</div>
+                <div class="pull-hint">Pull me down! 👇</div>
             </div>
+            
         </div>
     </div>
 
@@ -380,7 +376,6 @@
     </div>
 
     <script>
-        // --- OPTIMIZED TRAVEL SYSTEM ---
         const cloudContainer = document.getElementById('cloud-container');
         const travelEmojis = ['☁️', '☁️', '☁️', '✨', '💖'];
         let travelInterval;
@@ -396,10 +391,9 @@
             item.style.setProperty('--end-y', Math.sin(angle) * distance + 'vh');
             
             cloudContainer.appendChild(item);
-            setTimeout(() => item.remove(), 2000); // Clean up slightly faster
+            setTimeout(() => item.remove(), 2000); 
         }
 
-        // --- TYPEWRITER SYSTEM ---
         const titleArray = Array.from("Shreeee & Shimiiiiii 😝");
         const subArray = Array.from("Miles apart but close at heart ✈️💖");
         let tIdx = 0; let sIdx = 0;
@@ -408,7 +402,7 @@
             if (tIdx < titleArray.length) {
                 document.getElementById('typed-title').innerHTML += titleArray[tIdx];
                 tIdx++;
-                setTimeout(typeTitle, 80); // Typed slightly faster for smooth flow
+                setTimeout(typeTitle, 80); 
             } else {
                 setTimeout(typeSub, 200);
             }
@@ -424,7 +418,6 @@
             }
         }
 
-        // --- THE MAIN DIRECTOR ---
         function pullThread() {
             const thread = document.getElementById('thread');
             thread.style.transform = "translateY(50px) scale(0.8)";
@@ -436,7 +429,6 @@
                 document.getElementById('intro-screen').classList.add('pulled');
                 document.getElementById('main-content').classList.add('visible');
                 
-                // Spawn rate reduced from 120ms to 250ms for major lag reduction
                 travelInterval = setInterval(spawnTravelItem, 250);
 
                 setTimeout(() => {
@@ -455,7 +447,7 @@
                     let heart = document.getElementById('conn-heart');
                     heart.style.opacity = '1';
                     heart.style.animation = 'heartEncounter 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards';
-                    clearInterval(travelInterval); // Stop clouds
+                    clearInterval(travelInterval); 
                 }, 4000);
 
                 setTimeout(() => {
