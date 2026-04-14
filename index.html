@@ -22,16 +22,13 @@
             overflow-y: hidden; 
         }
 
-        /* =========================================
-           ✨ NEW: UPGRADED INTRO SCREEN ✨
-           ========================================= */
+        /* ✨ INTRO SCREEN ✨ */
         #intro-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            /* Animated Pastel Gradient Background */
             background: linear-gradient(-45deg, #ffb6c1, #ffc0cb, #ffe4e1, #ffc3a0);
             background-size: 400% 400%;
             animation: gradientBG 10s ease infinite;
@@ -50,7 +47,6 @@
             pointer-events: none;
         }
 
-        /* Glowing Intro Title */
         .intro-title {
             font-family: 'Caveat', cursive;
             font-size: 5rem;
@@ -71,7 +67,6 @@
             animation: floatingText 3s infinite ease-in-out reverse;
         }
 
-        /* Magic Background Sparkles */
         .bg-sparkle {
             position: absolute;
             font-size: 1.5rem;
@@ -91,7 +86,6 @@
             50% { transform: scale(1.2) translateY(-10px); opacity: 0.8; }
         }
 
-        /* The Thread and Heart */
         .thread-container {
             margin-top: 30px;
             display: flex;
@@ -124,11 +118,9 @@
             50% { filter: drop-shadow(0px 0px 25px rgba(255, 255, 255, 1)); transform: scale(1.05); }
         }
 
-        /* =========================================
-           MAIN CONTENT STYLES (Kept exactly the same)
-           ========================================= */
+        /* MAIN CONTENT */
         #main-content {
-            padding: 20px;
+            padding: 10px;
             opacity: 0;
             display: none; 
         }
@@ -157,22 +149,25 @@
             color: #d16b86;
         }
 
+        /* 📱 MOBILE FIXES APPLIED HERE 📱 */
         .photo-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: 2%; /* Dynamic gap */
             margin-bottom: 40px;
-            flex-wrap: wrap; 
+            flex-wrap: nowrap; /* Forces them to NEVER stack */
+            width: 100%;
         }
 
         .anim-wrapper { opacity: 0; }
 
         .polaroid {
             background: #fff;
-            padding: 10px 10px 20px 10px;
+            padding: 8px 8px 16px 8px; /* Thinner frames for mobile */
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            width: 160px;
+            width: 42vw; /* Scales dynamically with the screen size */
+            max-width: 160px; /* Max size for laptops/desktops */
             border-radius: 8px; 
             display: flex;
             flex-direction: column;
@@ -188,32 +183,29 @@
 
         .polaroid img {
             width: 100%;
-            height: 150px;
-            object-fit: cover;
+            height: 40vw; /* Keeps the images square-ish on mobile */
+            max-height: 150px;
+            object-fit: cover; /* This fixes the black bars on Shimi's photo! */
             border-radius: 5px;
-        }
-
-        .shimi img {
-            object-fit: contain; 
-            background-color: #fff; 
         }
 
         .polaroid p {
             margin-top: 10px;
             font-weight: bold;
             color: #ff85a2;
-            font-size: 1rem;
+            font-size: clamp(0.8rem, 3vw, 1rem); /* Dynamic font size */
         }
 
         .insta-link {
             text-decoration: none;
             color: #d16b86;
-            font-size: 0.85rem;
+            font-size: clamp(0.7rem, 2.5vw, 0.85rem);
             margin-top: 5px;
             background: #ffe6ea;
             padding: 4px 10px;
             border-radius: 20px;
             transition: all 0.3s ease;
+            white-space: nowrap; /* Prevents text from breaking */
         }
 
         .insta-link:hover {
@@ -225,8 +217,10 @@
         .shimi { transform: rotate(8deg); }
 
         .connecting-heart {
-            font-size: 3.5rem;
+            font-size: clamp(2rem, 8vw, 3.5rem); /* Shrinks nicely on small screens */
             opacity: 0;
+            flex-shrink: 0;
+            margin: 0 5px;
             filter: drop-shadow(0px 0px 10px rgba(255, 133, 162, 0.6));
         }
 
@@ -269,7 +263,7 @@
             cursor: pointer;
             box-shadow: 0 8px 15px rgba(255, 182, 193, 0.6);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-bottom: 40px;
+            margin-bottom: 20px;
             opacity: 0;
         }
 
@@ -282,29 +276,26 @@
             transform: scale(0.9);
         }
 
-        /* Main Content Keyframes */
+        .dev-credit {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #d16b86;
+            font-weight: bold;
+            opacity: 0;
+        }
+
+        /* Animations */
         .animate-bounce-down { animation: bounceDown 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.5s; }
         .animate-spring-left { animation: springOutLeft 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.8s; }
         .animate-spring-right { animation: springOutRight 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 1s; }
         .animate-heart-beat { animation: popInBeat 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 1.6s, continuousPulse 1.5s infinite 2.4s; }
         .animate-bounce-up { animation: bounceUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 2s; }
         .animate-pop-btn { animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 2.3s; }
+        .animate-credit { animation: bounceUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 2.6s; }
 
-        @keyframes gentleFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        @keyframes floatingText {
-            0%, 100% { transform: translateY(0) rotate(-1deg); }
-            50% { transform: translateY(-5px) rotate(1deg); }
-        }
-
-        @keyframes bounceThread {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(15px); }
-        }
-
+        @keyframes gentleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes floatingText { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-5px) rotate(1deg); } }
+        @keyframes bounceThread { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(15px); } }
         @keyframes bounceDown { 0% { opacity: 0; transform: translateY(-50px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes bounceUp { 0% { opacity: 0; transform: translateY(50px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes springOutLeft { 0% { opacity: 0; transform: scale(0.5) translateX(50px) rotate(20deg); } 100% { opacity: 1; transform: scale(1) translateX(0) rotate(0deg); } }
@@ -392,25 +383,22 @@
         <button class="hug-btn" id="hug-button" onclick="sendHug()">
             Send a Virtual Hug! 🤗
         </button>
+
+        <p class="dev-credit" id="credit-text">Made by Theshmil only 😸</p>
     </div>
 
     <script>
         function pullThread() {
             const thread = document.getElementById('thread');
-            
-            // The satisfying "rubber band" snap down
             thread.style.transform = "translateY(60px) scale(0.8)";
             
             setTimeout(() => {
-                // Play music
                 const music = document.getElementById('bg-music');
                 music.play().catch(error => console.log("Audio play blocked by browser."));
 
-                // Hide curtain
                 document.getElementById('intro-screen').classList.add('pulled');
                 document.body.style.overflowY = 'auto';
 
-                // Show content and trigger bouncy animations
                 document.getElementById('main-content').classList.add('visible');
                 document.getElementById('header-sect').classList.add('animate-bounce-down');
                 document.getElementById('shree-wrapper').classList.add('animate-spring-left');
@@ -418,6 +406,7 @@
                 document.getElementById('conn-heart').classList.add('animate-heart-beat');
                 document.getElementById('ldr-kit').classList.add('animate-bounce-up');
                 document.getElementById('hug-button').classList.add('animate-pop-btn');
+                document.getElementById('credit-text').classList.add('animate-credit');
             }, 250); 
         }
 
