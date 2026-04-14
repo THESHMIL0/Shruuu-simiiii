@@ -58,7 +58,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Cute floating background elements for the start page */
         #floating-bg-elements {
             position: absolute;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -99,7 +98,6 @@
             z-index: 10;
         }
 
-        /* The kitty peeking over the glass panel */
         .peeking-cat {
             position: absolute;
             top: -45px;
@@ -214,16 +212,29 @@
 
         #main-content.visible { display: flex; opacity: 1; }
 
-        header { flex-shrink: 0; }
+        header { 
+            flex-shrink: 0; 
+            padding-top: 10px; 
+            margin-bottom: 5px; 
+            width: 100%;
+        }
 
+        /* ✨ THE HEADER TEXT FIX ✨ */
         h1 {
-            font-size: clamp(2rem, 6vw, 2.8rem); 
-            color: #ff85a2; text-shadow: 2px 2px #fff;
-            margin-bottom: 5px; min-height: 40px;
+            font-family: 'Caveat', cursive; /* Applied the gorgeous handwritten font! */
+            font-size: clamp(2.5rem, 9vw, 3.5rem); /* Perfect scaling */
+            color: #ff85a2; 
+            text-shadow: 2px 2px 0px #fff, 0 4px 10px rgba(255, 133, 162, 0.2); /* Softer, premium shadow */
+            margin-bottom: 2px; 
+            line-height: 1.1;
+            letter-spacing: 1px;
         }
 
         p.subtitle {
-            font-size: clamp(0.9rem, 3vw, 1.1rem); font-weight: bold; color: #d16b86; min-height: 25px;
+            font-size: clamp(0.9rem, 3.5vw, 1.1rem); 
+            font-weight: bold; 
+            color: #d16b86; 
+            min-height: 25px;
         }
 
         .cursor {
@@ -429,11 +440,8 @@
             let el = document.createElement('div');
             el.innerHTML = cuteEmojis[Math.floor(Math.random() * cuteEmojis.length)];
             el.className = 'bg-cute';
-            // Random horizontal placement
             el.style.left = Math.random() * 100 + 'vw';
-            // Random sizing
             el.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
-            // Random speed & delay so they don't all move together
             el.style.animationDuration = (Math.random() * 8 + 8) + 's';
             el.style.animationDelay = (Math.random() * 10) + 's';
             bgContainer.appendChild(el);
@@ -493,7 +501,6 @@
             thread.style.transition = 'transform 0.2s ease-in';
             thread.style.transform = "translateY(100px) scale(0.8)";
             
-            // Fade out the background cute items
             bgContainer.style.opacity = '0';
             
             setTimeout(() => {
