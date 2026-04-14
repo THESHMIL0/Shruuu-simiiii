@@ -22,57 +22,47 @@
             overflow-y: hidden; 
         }
 
-        /* ✨ INTRO SCREEN ✨ */
+        /* ✨ TOTALLY REDESIGNED INTRO SCREEN ✨ */
         #intro-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: linear-gradient(-45deg, #ffb6c1, #ffc0cb, #ffe4e1, #ffc3a0);
+            background: linear-gradient(-45deg, #ff9a9e, #fecfef, #fbc2eb, #a18cd1);
             background-size: 400% 400%;
-            animation: gradientBG 10s ease infinite;
+            animation: gradientBG 15s ease infinite;
             z-index: 100;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            transition: transform 1.2s cubic-bezier(0.75, -0.5, 0, 1.75), opacity 1.2s ease;
+            justify-content: center;
+            /* New "Dive In" Transition */
+            transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.2s ease, filter 1.2s ease;
             overflow: hidden;
         }
 
+        /* The zoom-in effect when pulled */
         #intro-screen.pulled {
-            transform: translateY(-100vh);
+            transform: scale(2.5);
             opacity: 0;
+            filter: blur(10px);
             pointer-events: none;
         }
 
-        .intro-title {
-            font-family: 'Caveat', cursive;
-            font-size: 5rem;
-            color: #fff;
-            margin-top: 15vh;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px #ff85a2, 0 0 30px #ff85a2;
-            animation: gentleFloat 3s infinite ease-in-out;
-        }
-
-        .intro-text {
-            font-family: 'Quicksand', sans-serif;
-            font-weight: bold;
-            font-size: 1.5rem;
-            color: white;
-            margin-top: 10px;
-            text-shadow: 1px 1px 4px rgba(255, 133, 162, 0.6);
-            letter-spacing: 1px;
-            animation: floatingText 3s infinite ease-in-out reverse;
-        }
-
-        .bg-sparkle {
+        /* Continuous Floating Background Elements */
+        .bg-bubble {
             position: absolute;
-            font-size: 1.5rem;
-            opacity: 0.6;
-            animation: twinkle 4s infinite ease-in-out;
+            bottom: -100px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: riseUp 10s infinite ease-in;
             pointer-events: none;
+        }
+
+        @keyframes riseUp {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
         }
 
         @keyframes gradientBG {
@@ -81,44 +71,113 @@
             100% { background-position: 0% 50%; }
         }
 
-        @keyframes twinkle {
-            0%, 100% { transform: scale(0.8) translateY(0); opacity: 0.3; }
-            50% { transform: scale(1.2) translateY(-10px); opacity: 0.8; }
+        /* Frosted Glass Card */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 30px;
+            padding: 40px 30px;
+            width: 85vw;
+            max-width: 400px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .intro-title {
+            font-family: 'Caveat', cursive;
+            font-size: 4.5rem;
+            color: #fff;
+            line-height: 1.1;
+            text-shadow: 2px 2px 8px rgba(255, 133, 162, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .intro-text {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        /* The Thread Area */
+        .thread-wrapper {
+            position: relative;
+            margin-top: 10px;
         }
 
         .thread-container {
-            margin-top: 30px;
             display: flex;
             flex-direction: column;
             align-items: center;
             cursor: pointer;
-            animation: bounceThread 2s infinite;
+            animation: gentleFloat 2.5s infinite ease-in-out;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 10;
         }
 
         .thread-line {
-            width: 5px;
-            height: 20vh;
-            background-color: #fff;
+            width: 4px;
+            height: 80px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.2), rgba(255,255,255,1));
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(255,255,255,0.8);
         }
 
         .thread-heart {
-            font-size: 5rem;
-            margin-top: -15px;
-            filter: drop-shadow(0px 0px 15px rgba(255, 255, 255, 0.8));
+            font-size: 4.5rem;
+            margin-top: -10px;
+            filter: drop-shadow(0px 8px 10px rgba(255, 133, 162, 0.4));
             transition: transform 0.2s;
-            animation: heartGlowPulse 2s infinite;
         }
 
-        @keyframes heartGlowPulse {
-            0%, 100% { filter: drop-shadow(0px 0px 15px rgba(255, 255, 255, 0.6)); transform: scale(1); }
-            50% { filter: drop-shadow(0px 0px 25px rgba(255, 255, 255, 1)); transform: scale(1.05); }
+        .thread-container:hover .thread-heart {
+            transform: scale(1.1);
         }
 
-        /* MAIN CONTENT */
+        /* Bouncing "Pull Me" Tag */
+        .pull-hint {
+            position: absolute;
+            right: -60px;
+            top: 50%;
+            background: #ff85a2;
+            color: white;
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            padding: 5px 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(255, 133, 162, 0.4);
+            animation: bounceLeft 1.5s infinite;
+            pointer-events: none;
+        }
+
+        .pull-hint::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 8px solid #ff85a2;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        @keyframes bounceLeft {
+            0%, 100% { transform: translateX(0) translateY(-50%); }
+            50% { transform: translateX(-10px) translateY(-50%); }
+        }
+
+        /* MAIN CONTENT (Kept perfectly optimized for mobile from last step) */
         #main-content {
             padding: 10px;
             opacity: 0;
@@ -149,14 +208,13 @@
             color: #d16b86;
         }
 
-        /* 📱 MOBILE FIXES APPLIED HERE 📱 */
         .photo-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 2%; /* Dynamic gap */
+            gap: 2%; 
             margin-bottom: 40px;
-            flex-wrap: nowrap; /* Forces them to NEVER stack */
+            flex-wrap: nowrap; 
             width: 100%;
         }
 
@@ -164,10 +222,10 @@
 
         .polaroid {
             background: #fff;
-            padding: 8px 8px 16px 8px; /* Thinner frames for mobile */
+            padding: 8px 8px 16px 8px; 
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            width: 42vw; /* Scales dynamically with the screen size */
-            max-width: 160px; /* Max size for laptops/desktops */
+            width: 42vw; 
+            max-width: 160px; 
             border-radius: 8px; 
             display: flex;
             flex-direction: column;
@@ -183,9 +241,9 @@
 
         .polaroid img {
             width: 100%;
-            height: 40vw; /* Keeps the images square-ish on mobile */
+            height: 40vw; 
             max-height: 150px;
-            object-fit: cover; /* This fixes the black bars on Shimi's photo! */
+            object-fit: cover; 
             border-radius: 5px;
         }
 
@@ -193,7 +251,7 @@
             margin-top: 10px;
             font-weight: bold;
             color: #ff85a2;
-            font-size: clamp(0.8rem, 3vw, 1rem); /* Dynamic font size */
+            font-size: clamp(0.8rem, 3vw, 1rem); 
         }
 
         .insta-link {
@@ -205,7 +263,7 @@
             padding: 4px 10px;
             border-radius: 20px;
             transition: all 0.3s ease;
-            white-space: nowrap; /* Prevents text from breaking */
+            white-space: nowrap; 
         }
 
         .insta-link:hover {
@@ -217,7 +275,7 @@
         .shimi { transform: rotate(8deg); }
 
         .connecting-heart {
-            font-size: clamp(2rem, 8vw, 3.5rem); /* Shrinks nicely on small screens */
+            font-size: clamp(2rem, 8vw, 3.5rem); 
             opacity: 0;
             flex-shrink: 0;
             margin: 0 5px;
@@ -293,9 +351,6 @@
         .animate-pop-btn { animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 2.3s; }
         .animate-credit { animation: bounceUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 2.6s; }
 
-        @keyframes gentleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        @keyframes floatingText { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-5px) rotate(1deg); } }
-        @keyframes bounceThread { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(15px); } }
         @keyframes bounceDown { 0% { opacity: 0; transform: translateY(-50px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes bounceUp { 0% { opacity: 0; transform: translateY(50px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes springOutLeft { 0% { opacity: 0; transform: scale(0.5) translateX(50px) rotate(20deg); } 100% { opacity: 1; transform: scale(1) translateX(0) rotate(0deg); } }
@@ -329,19 +384,22 @@
     </audio>
 
     <div id="intro-screen">
-        <div class="bg-sparkle" style="top: 15%; left: 10%; font-size: 2rem;">✨</div>
-        <div class="bg-sparkle" style="top: 25%; left: 85%; animation-delay: 1s;">🌸</div>
-        <div class="bg-sparkle" style="top: 60%; left: 20%; animation-delay: 2s; font-size: 1.5rem;">💖</div>
-        <div class="bg-sparkle" style="top: 75%; left: 80%; animation-delay: 0.5s;">✨</div>
-        <div class="bg-sparkle" style="top: 85%; left: 15%; animation-delay: 1.5s;">💕</div>
-
-        <h2 class="intro-title">Shree & Shimi</h2>
-        <p class="intro-text">Tap the heart to pull the thread...</p>
         
-        <div class="thread-container" id="thread" onclick="pullThread()">
-            <div class="thread-line"></div>
-            <div class="thread-heart">💖</div>
+        <div id="bubble-container"></div>
+
+        <div class="glass-panel">
+            <h2 class="intro-title">Shree &<br>Shimi</h2>
+            <p class="intro-text">Ready to unlock our world?</p>
+            
+            <div class="thread-wrapper">
+                <div class="thread-container" id="thread" onclick="pullThread()">
+                    <div class="thread-line"></div>
+                    <div class="thread-heart">💖</div>
+                </div>
+                <div class="pull-hint">Pull me! 🥺</div>
+            </div>
         </div>
+
     </div>
 
     <div id="main-content">
@@ -388,17 +446,35 @@
     </div>
 
     <script>
+        // Generate floating background bubbles for the intro screen
+        const bubbleContainer = document.getElementById('bubble-container');
+        for(let i = 0; i < 15; i++) {
+            let bubble = document.createElement('div');
+            bubble.classList.add('bg-bubble');
+            let size = Math.random() * 60 + 20 + 'px';
+            bubble.style.width = size;
+            bubble.style.height = size;
+            bubble.style.left = Math.random() * 100 + 'vw';
+            bubble.style.animationDuration = Math.random() * 5 + 5 + 's';
+            bubble.style.animationDelay = Math.random() * 5 + 's';
+            bubbleContainer.appendChild(bubble);
+        }
+
         function pullThread() {
             const thread = document.getElementById('thread');
-            thread.style.transform = "translateY(60px) scale(0.8)";
+            // Rubber band snap effect
+            thread.style.transform = "translateY(50px) scale(0.8)";
             
             setTimeout(() => {
+                // Play audio
                 const music = document.getElementById('bg-music');
                 music.play().catch(error => console.log("Audio play blocked by browser."));
 
+                // Trigger the "Dive In" effect
                 document.getElementById('intro-screen').classList.add('pulled');
                 document.body.style.overflowY = 'auto';
 
+                // Reveal main content and run animations
                 document.getElementById('main-content').classList.add('visible');
                 document.getElementById('header-sect').classList.add('animate-bounce-down');
                 document.getElementById('shree-wrapper').classList.add('animate-spring-left');
@@ -407,6 +483,10 @@
                 document.getElementById('ldr-kit').classList.add('animate-bounce-up');
                 document.getElementById('hug-button').classList.add('animate-pop-btn');
                 document.getElementById('credit-text').classList.add('animate-credit');
+                
+                // Hide bubbles so they don't overlay the main site
+                setTimeout(() => { bubbleContainer.style.display = 'none'; }, 1000);
+
             }, 250); 
         }
 
