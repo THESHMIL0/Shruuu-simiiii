@@ -19,10 +19,10 @@
             color: #5a4a4d;
             text-align: center;
             overflow-x: hidden; 
-            overflow-y: hidden; 
+            overflow-y: hidden; /* Prevent scrolling during the journey */
         }
 
-        /* ✨ TOTALLY REDESIGNED INTRO SCREEN ✨ */
+        /* ✨ INTRO SCREEN ✨ */
         #intro-screen {
             position: fixed;
             top: 0;
@@ -36,12 +36,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            /* New "Dive In" Transition */
             transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.2s ease, filter 1.2s ease;
             overflow: hidden;
         }
 
-        /* The zoom-in effect when pulled */
         #intro-screen.pulled {
             transform: scale(2.5);
             opacity: 0;
@@ -49,7 +47,6 @@
             pointer-events: none;
         }
 
-        /* Continuous Floating Background Elements */
         .bg-bubble {
             position: absolute;
             bottom: -100px;
@@ -71,7 +68,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Frosted Glass Card */
         .glass-panel {
             background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(12px);
@@ -107,11 +103,7 @@
             margin-bottom: 20px;
         }
 
-        /* The Thread Area */
-        .thread-wrapper {
-            position: relative;
-            margin-top: 10px;
-        }
+        .thread-wrapper { position: relative; margin-top: 10px; }
 
         .thread-container {
             display: flex;
@@ -136,11 +128,8 @@
             transition: transform 0.2s;
         }
 
-        .thread-container:hover .thread-heart {
-            transform: scale(1.1);
-        }
+        .thread-container:hover .thread-heart { transform: scale(1.1); }
 
-        /* Bouncing "Pull Me" Tag */
         .pull-hint {
             position: absolute;
             right: -60px;
@@ -157,215 +146,168 @@
         }
 
         .pull-hint::before {
-            content: '';
-            position: absolute;
-            left: -8px;
-            top: 50%;
-            transform: translateY(-50%);
-            border-top: 8px solid transparent;
-            border-bottom: 8px solid transparent;
-            border-right: 8px solid #ff85a2;
+            content: ''; position: absolute; left: -8px; top: 50%;
+            transform: translateY(-50%); border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent; border-right: 8px solid #ff85a2;
         }
 
-        @keyframes gentleFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(10px); }
+        @keyframes gentleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
+        @keyframes bounceLeft { 0%, 100% { transform: translateX(0) translateY(-50%); } 50% { transform: translateX(-10px) translateY(-50%); } }
+
+        /* ✨ CLOUD TRAVEL SYSTEM ✨ */
+        #cloud-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 5;
         }
 
-        @keyframes bounceLeft {
-            0%, 100% { transform: translateX(0) translateY(-50%); }
-            50% { transform: translateX(-10px) translateY(-50%); }
+        .travel-item {
+            position: absolute; top: 50%; left: 50%;
+            font-size: 3rem;
+            transform: translate(-50%, -50%) scale(0.1);
+            opacity: 0;
+            animation: cloudZoom 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
         }
 
-        /* MAIN CONTENT (Kept perfectly optimized for mobile from last step) */
+        @keyframes cloudZoom {
+            0% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; }
+            30% { opacity: 0.9; }
+            100% { transform: translate(calc(-50% + var(--end-x)), calc(-50% + var(--end-y))) scale(12); opacity: 0; filter: blur(8px); }
+        }
+
+        /* ✨ MAIN CONTENT ✨ */
         #main-content {
-            padding: 10px;
-            opacity: 0;
-            display: none; 
+            padding: 10px; opacity: 0; display: none; 
         }
 
-        #main-content.visible {
-            display: block;
-            opacity: 1;
-        }
+        #main-content.visible { display: block; opacity: 1; }
 
-        header {
-            margin-bottom: 30px;
-            padding-top: 20px;
-            opacity: 0;
-        }
+        header { margin-bottom: 30px; padding-top: 20px; height: 100px; /* reserve space */ }
 
         h1 {
-            font-size: 2.8rem;
-            color: #ff85a2;
-            text-shadow: 2px 2px #fff;
-            margin-bottom: 5px;
+            font-size: 2.5rem; color: #ff85a2; text-shadow: 2px 2px #fff;
+            margin-bottom: 5px; min-height: 40px;
         }
 
         p.subtitle {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #d16b86;
+            font-size: 1.1rem; font-weight: bold; color: #d16b86; min-height: 25px;
         }
 
+        .cursor {
+            display: inline-block; width: 4px; background-color: #ff85a2;
+            animation: blink 1s step-end infinite; margin-left: 5px; vertical-align: text-bottom;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
         .photo-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 2%; 
-            margin-bottom: 40px;
-            flex-wrap: nowrap; 
-            width: 100%;
+            display: flex; align-items: center; justify-content: center;
+            gap: 2%; margin-bottom: 40px; flex-wrap: nowrap; width: 100%;
+            position: relative; z-index: 10;
         }
 
         .anim-wrapper { opacity: 0; }
 
         .polaroid {
-            background: #fff;
-            padding: 8px 8px 16px 8px; 
+            background: #fff; padding: 8px 8px 16px 8px; 
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            width: 42vw; 
-            max-width: 160px; 
-            border-radius: 8px; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            width: 42vw; max-width: 160px; border-radius: 8px; 
+            display: flex; flex-direction: column; align-items: center;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
         }
 
         .polaroid:hover {
             transform: scale(1.1) rotate(0deg) !important;
-            box-shadow: 0 15px 30px rgba(255, 133, 162, 0.3);
-            z-index: 20;
+            box-shadow: 0 15px 30px rgba(255, 133, 162, 0.3); z-index: 20;
         }
 
         .polaroid img {
-            width: 100%;
-            height: 40vw; 
-            max-height: 150px;
-            object-fit: cover; 
-            border-radius: 5px;
+            width: 100%; height: 40vw; max-height: 150px;
+            object-fit: cover; border-radius: 5px;
         }
 
-        .polaroid p {
-            margin-top: 10px;
-            font-weight: bold;
-            color: #ff85a2;
-            font-size: clamp(0.8rem, 3vw, 1rem); 
-        }
+        .polaroid p { margin-top: 10px; font-weight: bold; color: #ff85a2; font-size: clamp(0.8rem, 3vw, 1rem); }
 
         .insta-link {
-            text-decoration: none;
-            color: #d16b86;
-            font-size: clamp(0.7rem, 2.5vw, 0.85rem);
-            margin-top: 5px;
-            background: #ffe6ea;
-            padding: 4px 10px;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-            white-space: nowrap; 
+            text-decoration: none; color: #d16b86; font-size: clamp(0.7rem, 2.5vw, 0.85rem);
+            margin-top: 5px; background: #ffe6ea; padding: 4px 10px;
+            border-radius: 20px; transition: all 0.3s ease; white-space: nowrap; 
         }
 
-        .insta-link:hover {
-            background: #ff85a2;
-            color: white;
-        }
+        .insta-link:hover { background: #ff85a2; color: white; }
 
         .shree { transform: rotate(-8deg); }
         .shimi { transform: rotate(8deg); }
 
         .connecting-heart {
-            font-size: clamp(2rem, 8vw, 3.5rem); 
-            opacity: 0;
-            flex-shrink: 0;
-            margin: 0 5px;
-            filter: drop-shadow(0px 0px 10px rgba(255, 133, 162, 0.6));
+            font-size: clamp(2rem, 8vw, 3.5rem); opacity: 0;
+            flex-shrink: 0; margin: 0 5px; filter: drop-shadow(0px 0px 10px rgba(255, 133, 162, 0.6));
         }
 
         .checklist {
-            background: white;
-            max-width: 350px;
-            margin: 0 auto 30px auto;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            text-align: left;
-            opacity: 0;
-            border: 3px dashed #ffe6ea;
+            background: white; max-width: 350px; margin: 0 auto 30px auto;
+            padding: 20px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            text-align: left; opacity: 0; border: 3px dashed #ffe6ea;
         }
 
-        .checklist h3 {
-            color: #ff85a2;
-            text-align: center;
-            margin-bottom: 15px;
-            font-size: 1.4rem;
-        }
-
+        .checklist h3 { color: #ff85a2; text-align: center; margin-bottom: 15px; font-size: 1.4rem; }
         .checklist ul { list-style: none; }
-        .checklist li {
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #d16b86;
-        }
+        .checklist li { margin-bottom: 12px; font-size: 1.1rem; font-weight: bold; color: #d16b86; }
 
         .hug-btn {
-            background-color: #ffb6c1;
-            color: white;
-            border: none;
-            padding: 18px 35px;
-            font-size: 1.3rem;
-            font-family: 'Quicksand', sans-serif;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 8px 15px rgba(255, 182, 193, 0.6);
+            background-color: #ffb6c1; color: white; border: none;
+            padding: 18px 35px; font-size: 1.3rem; font-family: 'Quicksand', sans-serif;
+            font-weight: bold; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 8px 15px rgba(255, 182, 193, 0.6); margin-bottom: 20px; opacity: 0;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-bottom: 20px;
-            opacity: 0;
         }
 
-        .hug-btn:hover {
-            transform: scale(1.05);
-            background-color: #ff85a2;
-        }
-
-        .hug-btn:active {
-            transform: scale(0.9);
-        }
+        .hug-btn:hover { transform: scale(1.05); background-color: #ff85a2; }
+        .hug-btn:active { transform: scale(0.9); }
 
         .dev-credit {
-            margin-top: 30px;
-            font-size: 0.9rem;
-            color: #d16b86;
-            font-weight: bold;
-            opacity: 0;
+            margin-top: 30px; font-size: 0.9rem; color: #d16b86;
+            font-weight: bold; opacity: 0;
         }
 
-        /* Animations */
-        .animate-bounce-down { animation: bounceDown 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.5s; }
-        .animate-spring-left { animation: springOutLeft 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.8s; }
-        .animate-spring-right { animation: springOutRight 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 1s; }
-        .animate-heart-beat { animation: popInBeat 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 1.6s, continuousPulse 1.5s infinite 2.4s; }
-        .animate-bounce-up { animation: bounceUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 2s; }
-        .animate-pop-btn { animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 2.3s; }
-        .animate-credit { animation: bounceUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 2.6s; }
+        /* ✨ CINEMATIC FLIGHT ANIMATIONS ✨ */
+        /* They start off-center (25vw away) so when scaled up they sit perfectly in the middle of the phone screen */
+        
+        @keyframes shreeFlight {
+            0% { opacity: 0; transform: translate(25vw, 15vh) scale(0); }
+            15% { opacity: 1; transform: translate(25vw, 15vh) scale(1.6); z-index: 50; }
+            25% { opacity: 1; transform: translate(25vw, 15vh) scale(1.7); z-index: 50; } /* Subtle heartbeat scale */
+            40% { opacity: 1; transform: translate(25vw, 15vh) scale(1.6); z-index: 50; }
+            100% { opacity: 1; transform: translate(0, 0) scale(1); z-index: 10; }
+        }
 
-        @keyframes bounceDown { 0% { opacity: 0; transform: translateY(-50px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes shimiFlight {
+            0% { opacity: 0; transform: translate(-25vw, 15vh) scale(0); }
+            15% { opacity: 1; transform: translate(-25vw, 15vh) scale(1.6); z-index: 50; }
+            25% { opacity: 1; transform: translate(-25vw, 15vh) scale(1.7); z-index: 50; } /* Subtle heartbeat scale */
+            40% { opacity: 1; transform: translate(-25vw, 15vh) scale(1.6); z-index: 50; }
+            100% { opacity: 1; transform: translate(0, 0) scale(1); z-index: 10; }
+        }
+
+        @keyframes heartFlight {
+            0% { opacity: 0; transform: translateY(15vh) scale(0); }
+            30% { opacity: 1; transform: translateY(15vh) scale(3); filter: drop-shadow(0 0 20px #ff85a2);}
+            60% { opacity: 1; transform: translateY(15vh) scale(2.5); filter: drop-shadow(0 0 10px #ff85a2);}
+            100% { opacity: 1; transform: translate(0, 0) scale(1); }
+        }
+
+        /* Bottom UI popping up at the end */
+        .animate-bounce-up { animation: bounceUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .animate-pop-btn { animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.3s; }
+        .animate-credit { animation: bounceUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.6s; }
+
         @keyframes bounceUp { 0% { opacity: 0; transform: translateY(50px); } 100% { opacity: 1; transform: translateY(0); } }
-        @keyframes springOutLeft { 0% { opacity: 0; transform: scale(0.5) translateX(50px) rotate(20deg); } 100% { opacity: 1; transform: scale(1) translateX(0) rotate(0deg); } }
-        @keyframes springOutRight { 0% { opacity: 0; transform: scale(0.5) translateX(-50px) rotate(-20deg); } 100% { opacity: 1; transform: scale(1) translateX(0) rotate(0deg); } }
         @keyframes popIn { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
-        @keyframes popInBeat { 0% { opacity: 0; transform: scale(0); } 50% { opacity: 1; transform: scale(1.4); } 100% { opacity: 1; transform: scale(1); } }
-        @keyframes continuousPulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
+        /* Wavy Floating Hearts generated by Send Hug JS */
         .floating-heart {
-            position: fixed;
-            bottom: -50px;
-            font-size: 2rem;
-            animation: floatUpWavy 4s ease-in forwards;
-            pointer-events: none;
-            z-index: 50;
+            position: fixed; bottom: -50px; font-size: 2rem;
+            animation: floatUpWavy 4s ease-in forwards; pointer-events: none; z-index: 50;
         }
 
         @keyframes floatUpWavy {
@@ -384,13 +326,10 @@
     </audio>
 
     <div id="intro-screen">
-        
         <div id="bubble-container"></div>
-
         <div class="glass-panel">
             <h2 class="intro-title">Shree &<br>Shimi</h2>
             <p class="intro-text">Ready to unlock our world?</p>
-            
             <div class="thread-wrapper">
                 <div class="thread-container" id="thread" onclick="pullThread()">
                     <div class="thread-line"></div>
@@ -399,13 +338,14 @@
                 <div class="pull-hint">Pull me! 🥺</div>
             </div>
         </div>
-
     </div>
+
+    <div id="cloud-container"></div>
 
     <div id="main-content">
         <header id="header-sect">
-            <h1>Shreeee & Shimiiiiii 😝</h1>
-            <p class="subtitle">Miles apart but close at heart ✈️💖</p>
+            <h1><span id="typed-title"></span><span class="cursor" id="main-cursor"></span></h1>
+            <p class="subtitle" id="typed-sub"></p>
         </header>
 
         <div class="photo-container">
@@ -446,46 +386,114 @@
     </div>
 
     <script>
-        // Generate floating background bubbles for the intro screen
+        // Intro background bubbles
         const bubbleContainer = document.getElementById('bubble-container');
         for(let i = 0; i < 15; i++) {
             let bubble = document.createElement('div');
             bubble.classList.add('bg-bubble');
             let size = Math.random() * 60 + 20 + 'px';
-            bubble.style.width = size;
-            bubble.style.height = size;
+            bubble.style.width = size; bubble.style.height = size;
             bubble.style.left = Math.random() * 100 + 'vw';
             bubble.style.animationDuration = Math.random() * 5 + 5 + 's';
             bubble.style.animationDelay = Math.random() * 5 + 's';
             bubbleContainer.appendChild(bubble);
         }
 
+        // --- TRAVEL SYSTEM ---
+        const cloudContainer = document.getElementById('cloud-container');
+        const travelEmojis = ['☁️', '☁️', '☁️', '☁️', '✨', '💖', '🦋'];
+        let travelInterval;
+
+        function spawnTravelItem() {
+            const item = document.createElement('div');
+            item.innerHTML = travelEmojis[Math.floor(Math.random() * travelEmojis.length)];
+            item.className = 'travel-item';
+            
+            // Send them flying in random directions away from center
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 100 + Math.random() * 50; 
+            item.style.setProperty('--end-x', Math.cos(angle) * distance + 'vw');
+            item.style.setProperty('--end-y', Math.sin(angle) * distance + 'vh');
+            
+            cloudContainer.appendChild(item);
+            setTimeout(() => item.remove(), 2500);
+        }
+
+        // --- TYPEWRITER SYSTEM ---
+        const titleArray = Array.from("Shreeee & Shimiiiiii 😝");
+        const subArray = Array.from("Miles apart but close at heart ✈️💖");
+        let tIdx = 0; let sIdx = 0;
+
+        function typeTitle() {
+            if (tIdx < titleArray.length) {
+                document.getElementById('typed-title').innerHTML += titleArray[tIdx];
+                tIdx++;
+                setTimeout(typeTitle, 100);
+            } else {
+                setTimeout(typeSub, 300);
+            }
+        }
+
+        function typeSub() {
+            if (sIdx < subArray.length) {
+                document.getElementById('typed-sub').innerHTML += subArray[sIdx];
+                sIdx++;
+                setTimeout(typeSub, 50);
+            } else {
+                // Done typing, hide cursor
+                document.getElementById('main-cursor').style.display = 'none';
+            }
+        }
+
+        // --- THE MAIN DIRECTOR ---
         function pullThread() {
             const thread = document.getElementById('thread');
-            // Rubber band snap effect
             thread.style.transform = "translateY(50px) scale(0.8)";
             
             setTimeout(() => {
-                // Play audio
+                // 1. Audio & Screen Transition
                 const music = document.getElementById('bg-music');
                 music.play().catch(error => console.log("Audio play blocked by browser."));
-
-                // Trigger the "Dive In" effect
                 document.getElementById('intro-screen').classList.add('pulled');
-                document.body.style.overflowY = 'auto';
-
-                // Reveal main content and run animations
                 document.getElementById('main-content').classList.add('visible');
-                document.getElementById('header-sect').classList.add('animate-bounce-down');
-                document.getElementById('shree-wrapper').classList.add('animate-spring-left');
-                document.getElementById('shimi-wrapper').classList.add('animate-spring-right');
-                document.getElementById('conn-heart').classList.add('animate-heart-beat');
-                document.getElementById('ldr-kit').classList.add('animate-bounce-up');
-                document.getElementById('hug-button').classList.add('animate-pop-btn');
-                document.getElementById('credit-text').classList.add('animate-credit');
                 
-                // Hide bubbles so they don't overlay the main site
-                setTimeout(() => { bubbleContainer.style.display = 'none'; }, 1000);
+                // 2. Start zooming through clouds!
+                travelInterval = setInterval(spawnTravelItem, 120);
+
+                // 3. Shree flies in
+                setTimeout(() => {
+                    let sWrap = document.getElementById('shree-wrapper');
+                    sWrap.style.opacity = '1';
+                    sWrap.style.animation = 'shreeFlight 2.2s cubic-bezier(0.25, 1, 0.5, 1) forwards';
+                }, 500);
+
+                // 4. Shimi flies in
+                setTimeout(() => {
+                    let shWrap = document.getElementById('shimi-wrapper');
+                    shWrap.style.opacity = '1';
+                    shWrap.style.animation = 'shimiFlight 2.2s cubic-bezier(0.25, 1, 0.5, 1) forwards';
+                }, 2500);
+
+                // 5. Heart flies in & stop clouds
+                setTimeout(() => {
+                    let heart = document.getElementById('conn-heart');
+                    heart.style.opacity = '1';
+                    heart.style.animation = 'heartFlight 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards';
+                    clearInterval(travelInterval); // Stop spawning clouds
+                }, 4500);
+
+                // 6. Restore scrolling and start typing
+                setTimeout(() => {
+                    document.body.style.overflowY = 'auto';
+                    typeTitle();
+                }, 6000);
+
+                // 7. Pop up the UI at the bottom
+                setTimeout(() => {
+                    document.getElementById('ldr-kit').classList.add('animate-bounce-up');
+                    document.getElementById('hug-button').classList.add('animate-pop-btn');
+                    document.getElementById('credit-text').classList.add('animate-credit');
+                }, 8000);
 
             }, 250); 
         }
@@ -499,7 +507,6 @@
                     heart.style.left = (Math.random() * 80 + 10) + 'vw';
                     heart.style.fontSize = (Math.random() * 1.5 + 1.5) + 'rem';
                     document.body.appendChild(heart);
-                    
                     setTimeout(() => { heart.remove(); }, 4000);
                 }, i * 200);
             }
